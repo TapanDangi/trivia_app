@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './questions.dart';
+import './answers.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,24 +8,33 @@ class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
-  int questionIndex = 0;
+class _MyAppState extends State<MyApp> {
+  int _questionIndex = 0;
 
-  void answerQuestion() {
+  void _answerQuestion() {
     setState(() {
-      questionIndex += 1;
+      _questionIndex += 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     List questions = [
-      'What\'s your favourite colour?',
-      'What\'s your favourite animal?',
-      'What\'s your favourite place?',
+      {
+        'questionText': 'What\'s your favourite colour?',
+        'answer': ['Green', 'Red', 'Blue', 'Yellow'],
+      },
+      {
+        'questionText': 'What\'s your favourite pet?',
+        'answer': ['Snake', 'Bird', 'Cat', 'Dog'],
+      },
+      {
+        'questionText': 'What\'s your favourite place?',
+        'answer': ['Beach', 'Mountain', 'Village', 'City'],
+      },
     ];
     return MaterialApp(
       home: Scaffold(
@@ -32,23 +43,13 @@ class MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Text(questions[questionIndex]),
-            ElevatedButton(
-              onPressed: answerQuestion,
-              child: Text('Answer 1'),
+            Question(
+              questions[_questionIndex],
             ),
-            ElevatedButton(
-              onPressed: answerQuestion,
-              child: Text('Answer 2'),
-            ),
-            ElevatedButton(
-              onPressed: answerQuestion,
-              child: Text('Answer 3'),
-            ),
-            ElevatedButton(
-              onPressed: answerQuestion,
-              child: Text('Answer 4'),
-            ),
+            Answer(_answerQuestion),
+            Answer(_answerQuestion),
+            Answer(_answerQuestion),
+            Answer(_answerQuestion),
           ],
         ),
       ),
