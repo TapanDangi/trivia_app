@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './questions.dart';
-import './answers.dart';
+import 'package:trivia_app/result.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,8 +14,49 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _questionIndex = 0;
+  int _totalScore = 0;
 
-  void _answerQuestion() {
+  //for restarting the quiz
+  void _resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
+  }
+
+  final _questions = [
+    {
+      'questionText': 'What\'s your favourite colour?',
+      'answers': [
+        {'text': 'Green', 'score': 6},
+        {'text': 'Yellow', 'score': 9},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Blue', 'score': 2},
+      ],
+    },
+    {
+      'questionText': 'What\'s your favourite pet?',
+      'answers': [
+        {'text': 'Cat', 'score': 6},
+        {'text': 'Dog', 'score': 3},
+        {'text': 'Rabbit', 'score': 8},
+        {'text': 'Snake', 'score': 10},
+      ],
+    },
+    {
+      'questionText': 'What\'s your favourite place?',
+      'answers': [
+        {'text': 'Beach', 'score': 4},
+        {'text': 'Mountain', 'score': 1},
+        {'text': 'Village', 'score': 7},
+        {'text': 'Metropolis', 'score': 9},
+      ],
+    },
+  ];
+
+//For re-rendering the screen every time a button is pressed
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       _questionIndex += 1;
     });
@@ -22,36 +64,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    List questions = [
-      {
-        'questionText': 'What\'s your favourite colour?',
-        'answer': ['Green', 'Red', 'Blue', 'Yellow'],
-      },
-      {
-        'questionText': 'What\'s your favourite pet?',
-        'answer': ['Snake', 'Bird', 'Cat', 'Dog'],
-      },
-      {
-        'questionText': 'What\'s your favourite place?',
-        'answer': ['Beach', 'Mountain', 'Village', 'City'],
-      },
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('Personality Quiz'),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex],
-            ),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-            Answer(_answerQuestion),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            //executes if the condition is true
+            ? Quiz(
+                questions: _questions,
+                questionIndex: _questionIndex,
+                answerQuestion: _answerQuestion,
+              )
+            //executes if the condition is false
+            : Result(_totalScore, _resetQuiz),
       ),
     );
   }
